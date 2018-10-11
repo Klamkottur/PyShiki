@@ -1,6 +1,7 @@
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 
 import requests
+
 
 class Api(object):
     def __init__(self, nick, passwd, root_url='http://shikimori.org/api/'):
@@ -11,20 +12,23 @@ class Api(object):
         self.nick = nick
         self.passwd = passwd
 
-        token_url = self.root_url + 'access_token?nickname={}&password={}'.format(self.nick, self.passwd)
+        token_url = self.root_url + 'access_token?nickname={}&password={}'\
+            .format(self.nick, self.passwd)
+
         self.token = requests.get(token_url).json()['api_access_token']
 
         self.headers = {'X-User-Nickname': self.nick,
                         'X-User-Api-Access-Token': self.token,
                         'User-Agent': 'PyShiki v1.1.4'}
-        self.session = requests.Session() # Session for http-requests
+        self.session = requests.Session()  # Session for http-requests
         self.session.headers.update(self.headers)
 
     def _isv2(self, method_name):
         args_list = method_name.split("/")
         args = dict(enumerate(args_list))
 
-        if args.get(0) == 'user_rates' and not args.get(2) in ("cleanup", "reset"):
+        if args.get(0) == 'user_rates' and not args.get(2) \
+                in ("cleanup", "reset"):
             return True
         if args.get(0) == "topics":
             return True
@@ -52,11 +56,10 @@ class Api(object):
             r = self.session.delete(req_url)
         return r.json()
 
-
     def __rerp__(self):
-        return '<API-object nickname={} token={}>'.format(self.nick, self.token)
+        return '<API-object nickname={} token={}>'\
+            .format(self.nick, self.token)
 
-    
     def __getattr__(self, method_name):
         return Request(self, method_name)
 
@@ -87,4 +90,3 @@ class Request(object):
 
     def delete(self, **args):
         return self._api._makeReq(self, 'delete')
-
