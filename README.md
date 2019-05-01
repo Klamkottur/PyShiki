@@ -1,4 +1,9 @@
 # PyShiki
+
+
+# ABANDONED. This wrapper doesn't work properly with new Shikiori API and even more, using of this wrapper can cause your IP to be banned ([more](https://shikimori.org/api/doc)).
+
+
 Python lib for working with [shikimori.org](http://shikimori.org/) api
 
 Installing:
